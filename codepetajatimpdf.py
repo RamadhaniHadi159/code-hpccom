@@ -11,6 +11,11 @@ import os
 # ===============================
 #  KONFIGURASI JAWA TIMUR
 # ===============================
+# Resolusi Pdf
+plt.rcParams["savefig.dpi"] = 1000
+plt.rcParams["pdf.fonttype"] = 42
+plt.rcParams["ps.fonttype"] = 42
+
 USE_LOG = False  # false = ghi linier, true = log10(GHI)
 N_LEVELS = 15    # jumlah level gradasi warna
 
@@ -168,7 +173,7 @@ for (tahun, periode), grup in df.groupby(["year", "periode"]):
     wilayah_bg.boundary.plot(
         ax=ax,
         color="white",
-        edgecolor="white",
+        edgecolor="none",
         zorder=1 # urutan layer kecil=paling bawah dan sebaliknya
     )
     
@@ -250,8 +255,8 @@ for (tahun, periode), grup in df.groupby(["year", "periode"]):
     ax.set_ylabel("Latitude (°)")
 
     plt.savefig(
-        f"{output_dir}/peta_ghi_jatim_{tahun}_{periode}_{scale_tag}.png",
-        dpi=1000,
+        f"{output_dir}/peta_ghi_jatim_{tahun}_{periode}_{scale_tag}.pdf",
+        format="pdf",
         bbox_inches="tight"
     )
     plt.close()

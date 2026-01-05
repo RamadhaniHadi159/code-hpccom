@@ -96,7 +96,7 @@ norm = BoundaryNorm(levels, ncolors=256)
 # 7. OUTPUT
 # ===============================
 base_output_dir = "/home/hpccom/cimon/cimon_coba_peta"
-output_dir = os.path.join(base_output_dir, "coba_peta_jatimlagi3")
+output_dir = os.path.join(base_output_dir, "coba_peta_jatimlagi5")
 os.makedirs(output_dir, exist_ok=True)
 
 scale_tag = "log" if USE_LOG else "linier"
@@ -135,7 +135,8 @@ for (tahun, periode), grup in df.groupby(["year", "periode"]):
 
     xi = np.arange(minx, maxx + RES_PLOT, RES_PLOT)
     yi = np.arange(miny, maxy + RES_PLOT, RES_PLOT)
-    xi, yi = np.meshgrid(xi, yi
+    xi, yi = np.meshgrid(xi, yi)
+
     # ===========================
     # INTERPOLASI
     # ===========================
@@ -196,12 +197,28 @@ for (tahun, periode), grup in df.groupby(["year", "periode"]):
         linewidth=0.5,
         zorder=4
     )
-        
+    
+    # Offset Untuk Nama Kabupaten Yang Eror
+    LABEL_OFFSET = {
+	"Gresik": (0.0, -0.15),
+	"Sumenep": (0.0, -0.12),
+}
+
     # Label Kab/Kota
     for _, row in kabkot_jatim.iterrows():
+
+        x = row["label_point"].x
+        y = row["label_point"].y
+
+    # Terapkan Jika Ada Yang Eror 
+    if row in LABEL_OFFSET:
+        dx, dy = LABEL_OFFSET[row["LABEL_NAME"]]
+        x += dx 
+        y += dy
+
         ax.text(
-            row["label_point"].x,
-            row["label_point"].y,
+            x,
+            y,
             row["LABEL_NAME"],
             fontsize=2.5,
             ha="center",
